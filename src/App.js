@@ -1,118 +1,24 @@
-import { useState, useEffect } from "react";
-import "./App.css";
+import { Routes, Route, NavLink } from "react-router-dom";
+import Home from "./pages/Home/Home.jsx";
+import Products from "./pages/Products/Products.jsx";
+import Contacts from "./pages/Contacts/Contacts.jsx";
+import Partners from "./components/Partners/Partners.jsx";
 
 const App = () => {
-  const [state, setState] = useState({
-    ability: [],
-    perPage: 5,
-  });
-  const { ability, perPage } = state;
-
-  useEffect(() => {
-    function fetchPokemons() {
-      const pokemon = fetch(
-        `https://pokeapi.co/api/v2/ability?limit=${perPage}`
-      );
-      pokemon
-        .then((response) => response.json())
-        .then(({ results }) =>
-          setState((prevState) => ({
-            ...prevState,
-            ability: results.map((item) => item.name),
-          }))
-        );
-    }
-
-    fetchPokemons();
-  }, [perPage]);
-
-  function onSelect(event) {
-    // console.log(event.target.value);
-    setState({
-      ...state,
-      perPage: event.target.value,
-    });
-  }
-
   return (
     <>
-      <select name="ability" id="ability" onChange={onSelect} defaultValue="5">
-        <option value="5">1-5</option>
-        <option value="10">1-10</option>
-        <option value="15">1-15</option>
-      </select>
-      <ol>
-        {ability.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ol>
+      <NavLink to="/">Home</NavLink>
+      <NavLink to="/products">Products</NavLink>
+      <NavLink to="/contacts">Contacts</NavLink>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Products />}>
+          <Route path="partners" element={<Partners />} />
+        </Route>
+        <Route path="/contacts" element={<Contacts />} />
+      </Routes>
     </>
   );
 };
 
 export default App;
-
-// class App extends Component {
-//   constructor() {
-//     super();
-//     this.state = {
-//       ability: [],
-//       perPage: 5,
-//     };
-//     this.onSelect = this.onSelect.bind(this);
-//   }
-//   // state = {
-//   //   ability: [],
-//   //   perPage: 5,
-//   // };
-//   componentDidMount() {
-//     this.fetchPokemons();
-//   }
-//   componentDidUpdate(_, prevState) {
-//     if (this.state.perPage !== prevState.perPage) {
-//       this.fetchPokemons();
-//     }
-//   }
-//   fetchPokemons() {
-//     const pokemon = fetch(
-//       `https://pokeapi.co/api/v2/ability?limit=${this.state.perPage}`
-//     );
-//     pokemon
-//       .then((response) => response.json())
-//       .then(({ results }) =>
-//         this.setState({
-//           ability: results.map((item) => item.name),
-//         })
-//       );
-//   }
-//   onSelect(event) {
-//     // console.log(event.target.value);
-//     this.setState({
-//       perPage: event.target.value,
-//     });
-//   }
-//   render() {
-//     const { ability } = this.state;
-//     return (
-//       <>
-//         <select
-//           name="ability"
-//           id="ability"
-//           onChange={this.onSelect}
-//           defaultValue="5"
-//         >
-//           <option value="5">1-5</option>
-//           <option value="10">1-10</option>
-//           <option value="15">1-15</option>
-//         </select>
-//         <ol>
-//           {ability.map((item) => (
-//             <li key={item}>{item}</li>
-//           ))}
-//         </ol>
-//       </>
-//     );
-//   }
-// }
-
-// export default App;
